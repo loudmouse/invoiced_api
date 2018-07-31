@@ -1,5 +1,6 @@
 class V1::ContactsController < ApplicationController
   def index
+    byebug
     @contacts = Contact.all
 
     render json: @contacts, status: :ok
@@ -9,7 +10,7 @@ class V1::ContactsController < ApplicationController
     @contact = Contact.new(contact_params)
 
     @contact.save
-    render json: @contact, status :created
+    render json: @contact, status: :created
   end
 
   def destroy
