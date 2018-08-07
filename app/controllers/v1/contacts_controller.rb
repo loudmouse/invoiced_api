@@ -10,16 +10,27 @@ module V1
     end
 
     def create
-      organization = current_account.organization.friendly.find(params[:organization_id])
-      @contact = organization.contacts.build(contact_params)
+      @contact = current_organization.contacts.build(contact_params)
 
-      @contact.save
-      render :create, status: :created
+      if @contact.save
+        render :create, status: :created
+      else
+        head(:unprocessable_entity)
+      end
+    end
+
+    def update
+      @contact = current_organization.contacts.find(params[:id])
+
+      if @contact.update(contact_params)
+        render :update
+      else
+        head(:unprocessable_entity)
+      end
     end
 
     def destroy
-      organization = current_account.organization.friendly.find(params[:organization_id])
-      @contact = current_user.contacts.where(id: params[:id]).first
+      @contact = current_organization.contacts.find(id: params[:id])
       if @contact.destroy
         head(:ok)
       else
@@ -28,8 +39,12 @@ module V1
     end
 
     def current_account
-      @account ||= Account.friendly.find(params[:account_id])
-      @account
+      @current_account ||= Account.friendly.find(params[:account_id])
+    end
+
+    def current_organization
+      @current_organization ||=
+        current_account.organizations.friendly.find(params[:organization_id])
     end
 
 
