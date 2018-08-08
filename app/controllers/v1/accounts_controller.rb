@@ -4,10 +4,10 @@ module V1
   # Manages the Account model
   class AccountsController < ApplicationController
     def create
-      @account = current_user.accounts.build(account_params)
+      account = current_user.accounts.build(account_params)
 
-      if @account.save
-        render :create, status :created
+      if account.save
+        render :create, status: :created, locals: { account: account }
       else
         head(:unprocessable_entity)
       end
@@ -17,10 +17,10 @@ module V1
       @account = current_user.accounts.friendly.find(params[:id])
 
       if @account.update(account_params)
-        render
+        render :update
       else
         head(:unprocessable_entity)
-
+      end
     end
 
     private
