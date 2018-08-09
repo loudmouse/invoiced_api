@@ -1,0 +1,7 @@
+one:
+  name: <%= Faker::Company.name %>
+  account: loudmouse
+
+two:
+  name: <%= Faker::Company.name %>
+  account: onbelay
